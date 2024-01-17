@@ -37,7 +37,7 @@ export default function HomeScreen () {
         
         {/* upcoming, top rated movies rows goes here */}
         <MovieList title="Upcoming" data={upcoming} />
-        <MovieList title="Top Rated" data={topRated} />     
+        <MovieList title="Top rated" data={topRated} />     
       </ScrollView>
     </View>
   );
