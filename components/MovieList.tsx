@@ -50,7 +50,7 @@ export default function MovieList({title, data, hideSeeAll}) {
 
                   <Text className="text-neutral-300 ml-1">
                     {
-                      item.title.length > 14 ? item.title.slice(0, 14) + '...' : item.title 
+                      item?.title?.length > 14 ? item.title.slice(0, 14) + '...' : item.title 
                     }
                   </Text>
                 </View>

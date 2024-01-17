@@ -80,7 +80,7 @@ export default function SearchScreen() {
         ) : (
           <View className="flex-row justify-center">
             <Image 
-              source={require('../assets/images/suzanne-with-color-and-hat.png')}
+              source={require('../assets/images/movieTime.png')}
               className="h-96 w-96"
             />
           </View>

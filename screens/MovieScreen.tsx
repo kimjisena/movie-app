@@ -29,6 +29,7 @@ export default function MovieScreen() {
     setLoading(true);
     getMovieDetails(item.id);
     getMovieCredits(item.id);
+    getSimilarMovies(item.id);
   }, [item]);
 
   const getMovieDetails = async (id) => {
@@ -41,9 +42,16 @@ export default function MovieScreen() {
 
   const getMovieCredits = async (id) => {
     const data = await fetchMovieCredits(id);
-    console.log('tenemos movie credits: ', data);
     if (data && data.cast) {
       setCast(data.cast);
+    }
+  }
+
+  const getSimilarMovies = async (id) => {
+    const data = await fetchSimilarMovies(id);
+    console.log('tenemos pelicula similar: ', data);
+    if (data && data.results) {
+      setSimilarMovies(data.results);
     }
   }
 
@@ -134,8 +142,12 @@ export default function MovieScreen() {
       </View>
 
       {/* cast */}
-      <Cast navigation={navigation} cast={cast} />
-
+      {
+        cast.length && !loading ? (
+          <Cast navigation={navigation} cast={cast} />
+        ) : null       
+      }
+     
       {/* similar movies go here */}
       <MovieList title="Similar movies" hideSeeAll data={similarMovies} />
     </ScrollView>
