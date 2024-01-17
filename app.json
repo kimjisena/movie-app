@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MovieApp",
-    "slug": "MovieApp",
+    "slug": "movie-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kimjisena.movieapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "95181988-a48c-4b5e-8ac2-9a608f0d8cb8"
+      }
+    },
+    "owner": "kimjisena"
   }
 }
