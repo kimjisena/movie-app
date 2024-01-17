@@ -8,15 +8,44 @@ import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { fetchTrendingMovies, fetchUpcomingMovies, fetchTopRatedMovies } from '../api/moviedb';
 
 const ios = Platform.OS === 'ios';
 
 export default function HomeScreen () {
-  const [trending, setTrending] = React.useState([1, 2, 3]);
-  const [upcoming, setUpcoming] = React.useState([1, 2, 3]);
-  const [topRated, setTopRated] = React.useState([1, 2, 3]);
-  const [loading, setLoading] = React.useState(false);
+  const [trending, setTrending] = React.useState([]);
+  const [upcoming, setUpcoming] = React.useState([]);
+  const [topRated, setTopRated] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const navigation = useNavigation();
+  
+  React.useEffect(() => {
+    getTrendingMovies();
+    getUpcomingMovies();
+    getTopRatedMovies();
+  }, []);
+
+  const getTrendingMovies = async () => {
+    const data = await fetchTrendingMovies();
+    if (data && data.results) {
+      setTrending(data.results);
+    }
+    setLoading(false);
+  }
+
+  const getUpcomingMovies = async () => {
+    const data = await fetchUpcomingMovies();
+    if (data && data.results) {
+      setUpcoming(data.results);
+    }
+  }
+
+  const getTopRatedMovies = async () => {
+    const data = await fetchTopRatedMovies();
+    if (data && data.results) {
+      setTopRated(data.results);
+    }
+  }
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -41,7 +70,7 @@ export default function HomeScreen () {
             contentContainerStyle={{paddingBottom: 10}}
           >
             {/* trending movies carousel goes here */}
-            <TrendingMovies data={trending} />
+            {trending.length && <TrendingMovies data={trending} />} 
             
             {/* upcoming, top rated movies rows go here */}
             <MovieList title="Upcoming" data={upcoming} />

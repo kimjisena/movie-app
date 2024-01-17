@@ -9,6 +9,7 @@ import { styles, theme } from '../theme';
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { fallbackMoviePoster, fetchMovieDetails, fetchMovieCredits, fetchSimilarMovies, image500 } from '../api/moviedb';
 
 const { width, height } = Dimensions.get('window');
 const ios = Platform.OS === ios;
@@ -19,17 +20,33 @@ export default function MovieScreen() {
   const navigation = useNavigation();
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [cast, setCast] = React.useState([1, 2, 3, 4, 5]);
-  const [similarMovies, setSimilarMovies] = React.useState([1, 2, 3, 4, 5]);
+  const [similarMovies, setSimilarMovies] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [movie, setMovie] = React.useState({});
   const movieName = 'Kingdom II: Far and Away';
 
   React.useEffect(() => {
-    // call the api to get the movie dits 
+    setLoading(true);
+    getMovieDetails(item.id);
+    getMovieCredits(item.id);
+  }, [item]);
 
-    return () => {
-     // to be implemented 
+  const getMovieDetails = async (id) => {
+    const data = await fetchMovieDetails(id);
+    if (data) {
+      setMovie(data);
     }
-  }, [item])
+    setLoading(false);
+  }
+
+  const getMovieCredits = async (id) => {
+    const data = await fetchMovieCredits(id);
+    console.log('tenemos movie credits: ', data);
+    if (data && data.cast) {
+      setCast(data.cast);
+    }
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{paddingBottom: 20,}}
@@ -52,7 +69,7 @@ export default function MovieScreen() {
           ) : (
            <View>
             <Image
-              source={require('../assets/images/suzanne-with-color-and-hat.png')}
+              source={{uri: image500(movie?.poster_path) || fallbackMoviePoster}}
               style={{
                 width,
                 height: height * .55
@@ -81,31 +98,38 @@ export default function MovieScreen() {
         {/* movie title goes here */}
         <Text className="text-white text-center font-bold text-3xl tracking-wider">
           {
-            movieName
+            movie?.title 
           }
         </Text>
 
         {/* status, release date, run time */}
-        <Text className="text-neutral-400 font-semibold text-base text-center">
-          Released • 2020 • 170 min
-        </Text>
+        {
+          movie?.id ? (
+            <Text className="text-neutral-400 font-semibold text-base text-center">
+              {movie?.status} • {movie?.release_date?.split('-')[0] } • {movie?.runtime} min
+            </Text>
+          ) : null
+        }
 
         {/* genres */}
+
         <View className="flex-row justify-center mx-4 space-x-2">
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Comedy •
-          </Text>
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Action •
-          </Text>
-          <Text className="text-neutral-400 font-semibold text-base text-center">
-            Thriller 
-          </Text>
+        {
+          movie?.genres?.map((genre, idx) => {
+            let showDot = idx + 1 !== movie.genres.length;
+
+            return (
+              <Text className="text-neutral-400 font-semibold text-base text-center">
+                {genre?.name}{showDot ? '•' : ''}
+              </Text>            
+            )
+          })
+        }
         </View>
 
         {/* description */}
         <Text className="text-neutral-400 mx-4 tracking-wide">
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.         
+          {movie?.overview}
         </Text>
       </View>
 
