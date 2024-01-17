@@ -6,6 +6,7 @@ import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons
 import { styles } from '../theme';
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ios = Platform.OS === 'ios';
 
@@ -13,6 +14,7 @@ export default function HomeScreen () {
   const [trending, setTrending] = React.useState([1, 2, 3]);
   const [upcoming, setUpcoming] = React.useState([1, 2, 3]);
   const [topRated, setTopRated] = React.useState([1, 2, 3]);
+  const navigation = useNavigation();
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -23,7 +25,7 @@ export default function HomeScreen () {
           <Bars3CenterLeftIcon size="30" strokeWidth={2} color="white" />
           <Text className="text-white text-3xl font-bold">
             <Text style={styles.text}>M</Text>ovies</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
             <MagnifyingGlassIcon size="30" strokeWidth={2} color="white" />
           </TouchableOpacity>
         </View>
@@ -35,7 +37,7 @@ export default function HomeScreen () {
         {/* trending movies carousel goes here */}
         <TrendingMovies data={trending} />
         
-        {/* upcoming, top rated movies rows goes here */}
+        {/* upcoming, top rated movies rows go here */}
         <MovieList title="Upcoming" data={upcoming} />
         <MovieList title="Top rated" data={topRated} />     
       </ScrollView>
