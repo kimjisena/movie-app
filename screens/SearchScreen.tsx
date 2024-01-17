@@ -3,6 +3,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Loading from '../components/Loading';
 
 const { width, height } = Dimensions.get('window');
 const ios = Platform.OS === ios;
@@ -12,6 +13,7 @@ export default function SearchScreen() {
   const navigation = useNavigation();
   const movieName = 'Kingdom II: Far and Away';
   const [results, setResults] = React.useState([1, 2, 3, 4, 5]);
+  const [loading, setLoading] = React.useState(false);
 
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
@@ -33,7 +35,10 @@ export default function SearchScreen() {
 
       {/* search results */}
       {
-        results.length ? (
+        loading ? (
+          <Loading />
+        ) : 
+         results.length ? (
           <ScrollView
             showsVerticalScrollIndicatore={false}
             contentContainerStyle={{
@@ -80,7 +85,7 @@ export default function SearchScreen() {
             />
           </View>
         )
-      }
+      } 
     </SafeAreaView>
   )
 }

@@ -6,6 +6,7 @@ import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons
 import { styles } from '../theme';
 import TrendingMovies from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ios = Platform.OS === 'ios';
@@ -14,6 +15,7 @@ export default function HomeScreen () {
   const [trending, setTrending] = React.useState([1, 2, 3]);
   const [upcoming, setUpcoming] = React.useState([1, 2, 3]);
   const [topRated, setTopRated] = React.useState([1, 2, 3]);
+  const [loading, setLoading] = React.useState(false);
   const navigation = useNavigation();
 
   return (
@@ -30,17 +32,23 @@ export default function HomeScreen () {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-      <ScrollView
-        showVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 10}}
-      >
-        {/* trending movies carousel goes here */}
-        <TrendingMovies data={trending} />
-        
-        {/* upcoming, top rated movies rows go here */}
-        <MovieList title="Upcoming" data={upcoming} />
-        <MovieList title="Top rated" data={topRated} />     
-      </ScrollView>
+      {
+        loading ? (
+          <Loading />
+        ) : (
+          <ScrollView
+            showVerticalScrollIndicator={false}
+            contentContainerStyle={{paddingBottom: 10}}
+          >
+            {/* trending movies carousel goes here */}
+            <TrendingMovies data={trending} />
+            
+            {/* upcoming, top rated movies rows go here */}
+            <MovieList title="Upcoming" data={upcoming} />
+            <MovieList title="Top rated" data={topRated} />     
+          </ScrollView>
+        )
+      }
     </View>
   );
 }
