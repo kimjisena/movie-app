@@ -9,7 +9,7 @@ const {width, height} = Dimensions.get('window');
 export default function TrendingMovies ({data}) {
   const navigation = useNavigation();
   
-  const handleClick = () => {
+  const handleClick = (item) => {
     navigation.navigate("Movie", item);
   };
 
@@ -31,7 +31,7 @@ export default function TrendingMovies ({data}) {
 
 const MovieCard = ({item, handleClick}) => {
   return (
-    <TouchableOpacity onPress={handleClick}>
+    <TouchableOpacity onPress={() => handleClick(item)}>
       <Image
         source={require("../assets/images/suzanne-with-color-and-hat.png")}
         style={{
