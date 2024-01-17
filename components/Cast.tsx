@@ -20,7 +20,7 @@ export default function Cast({cast, navigation}) {
           cast && cast.map((person, idx) => {
             return (
               <TouchableOpacity
-                key={idx}
+                key={person?.id}
                 className="mr-4 items-center"
                 onPress={() => navigation.navigate('Person', person)}
               >

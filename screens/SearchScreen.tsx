@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Loading from '../components/Loading';
+import { debounce } from 'lodash';
+import { searchMovies, image185, fallbackMoviePoster } from '../api/moviedb';
 
 const { width, height } = Dimensions.get('window');
 const ios = Platform.OS === ios;
@@ -12,8 +14,29 @@ const verticalMargin = ios ? '' : 'my-3';
 export default function SearchScreen() {
   const navigation = useNavigation();
   const movieName = 'Kingdom II: Far and Away';
-  const [results, setResults] = React.useState([1, 2, 3, 4, 5]);
+  const [results, setResults] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+
+  const handleSearch = async (value) => {
+    if (value && value.length > 2) {
+      setLoading(true);
+      const data = await searchMovies({
+        query: value,
+        include_adult: false,
+        language: 'en-US',
+        page: '1'
+      });
+      setLoading(false);
+      if (data && data.results) {
+        setResults(data.results);
+      }
+    } else {
+      setLoading(false);
+      setResults([]);
+    }
+  }
+
+  const handleTextDebounce = React.useCallback(debounce(handleSearch, 400), []);
 
   return (
     <SafeAreaView className="bg-neutral-800 flex-1">
@@ -21,6 +44,7 @@ export default function SearchScreen() {
         className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full"
       >
         <TextInput
+          onChangeText={handleTextDebounce}
           placeholder='Search movie'
           placeholderTextColor={'lightgray'}
           className="pb-1 pl-6 flex-1 font-semibold text-base text-white tracking-wider"
@@ -52,13 +76,13 @@ export default function SearchScreen() {
                 results.map((item, idx) => {
                   return (
                     <TouchableWithoutFeedback
-                      key={idx}
+                      key={item?.id}
                       onPress={() => navigation.push('Movie', item)}
                     >
                       <View className="space-y-2 mb-4">
                         <Image 
                           className="rounded-3xl"
-                          source={require('../assets/images/suzanne-with-color-and-hat.png')}
+                          source={{uri: image185(item?.poster_path) || fallbackMoviePoster}}
                           style={{
                             width: width * .44,
                             height: height * .3
@@ -66,7 +90,7 @@ export default function SearchScreen() {
                         />
                         <Text className="text-neutral-300 ml-1">
                           {
-                            movieName.length > 22 ? movieName.slice(0, 22) + '...' : movieName
+                            item?.title?.length > 22 ? item?.title.slice(0, 22) + '...' : item?.title
                           }
                         </Text>
                       </View>

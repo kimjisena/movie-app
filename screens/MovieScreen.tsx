@@ -49,7 +49,6 @@ export default function MovieScreen() {
 
   const getSimilarMovies = async (id) => {
     const data = await fetchSimilarMovies(id);
-    console.log('tenemos pelicula similar: ', data);
     if (data && data.results) {
       setSimilarMovies(data.results);
     }
@@ -149,7 +148,11 @@ export default function MovieScreen() {
       }
      
       {/* similar movies go here */}
-      <MovieList title="Similar movies" hideSeeAll data={similarMovies} />
+      {
+        similarMovies.length && !loading ? (
+          <MovieList title="Similar movies" hideSeeAll data={similarMovies} />
+        ) : null
+      }    
     </ScrollView>
   )
 }
