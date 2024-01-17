@@ -1,18 +1,22 @@
 import axios from 'axios';
-import { apiKey } from '../constants';
+import { apiKey } from '../constants'; // create this file and use your api key
 
 // base URL 
 const apiBaseUrl = 'https://api.themoviedb.org/3'; 
 
-// endpoints 
+// home ui endpoints 
 const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?language=en-US&api_key=${apiKey}`;
 const upcomingMoviesEndpoint = `${apiBaseUrl}/movie/upcoming?language=en-US&api_key=${apiKey}`;
 const topRatedMoviesEndpoint = `${apiBaseUrl}/movie/top_rated?language=en-US&api_key=${apiKey}`;
 
-// dynamic endpoints
+// movie ui endpoints
 const movieDetailsEndpoint = id => `${apiBaseUrl}/movie/${id}?language=en-US&api_key=${apiKey}`;
 const movieCreditsEndpoint = id => `${apiBaseUrl}/movie/${id}/credits?language=en-US&api_key=${apiKey}`;
 const movieSimilarEndpoint = id => `${apiBaseUrl}/movie/${id}/similar?language=en-US&api_key=${apiKey}`;
+
+// person ui endpoints 
+const personDetailsEndpoint = id => `${apiBaseUrl}/person/${id}?language=en-US&api_key=${apiKey}`;
+const personMovieCreditsEndpoint = id => `${apiBaseUrl}/person/${id}/movie_credits?language=en-US&api_key=${apiKey}`;
 
 // image paths
 export const image500 = path => path ? `https://image.tmdb.org/t/p/w500${path}` : null;
@@ -61,5 +65,13 @@ export const fetchMovieCredits = (id) => {
 
 export const fetchSimilarMovies = (id) => {
   return apiCall(movieSimilarEndpoint(id));
+}
+
+export const fetchPersonDetails = (id) => {
+  return apiCall(personDetailsEndpoint(id));
+}
+
+export const fetchPersonMovies = (id) => {
+  return apiCall(personMovieCreditsEndpoint(id));
 }
 
