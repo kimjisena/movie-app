@@ -30,10 +30,12 @@ To develop this project:
 - Make sure you have NodeJS, and a package manager of your choice (yarn, npm, pnpm, bun)
 
 - Clone the repository
+  
     ```sh
     git clone https://github.com/kimjisena/movie-app.git
     ```
 - Move into the `movie-app` directory and install dependencies
+  
     ```sh
     // yarn (recommended as this project uses yarn)
     yarn
@@ -54,6 +56,7 @@ To develop this project:
     ```
 - Run the development server
 
+    ```sh
     yarn start
     ```
 - With Expo Go installed on your phone, use a camera app (iOS) or QR Code scanner (Android) to 
